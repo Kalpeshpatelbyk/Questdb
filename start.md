@@ -1,31 +1,32 @@
---Learning Questdb for finance.
---https://github.com/Kalpeshpatelbyk/Questdb.git
+1.--Learning Questdb for finance.
+2.--https://github.com/Kalpeshpatelbyk/Questdb.git
 
-1.Create table from csv file and import in respected csv header form
-2.convert int to double for size columns
-3.convert timestamp colum to questdb Timestamp
+1. Create table from csv file and import in respected csv header form.
+2. Convert int to double for size columns.
+3. Convert timestamp colum to questdb Timestamp.
+4. Create ohlc table from existing table for respective table
+5. Create new table optionchain
 
-4.Create ohlc table from existing table for respective table
-5.create new table optionchain
+Tables________________________________________
 
-_____________Tables_________________________________________________________________________
-Users: ( Username varchar, password varchar , usertype varchar )
-Roles: ( Role:admin,  Role:user)
-Menus: (uploadfile,backup, restore, dashboard, expiry_settings, App_settings, userroles)
-BackupSettings ( backup_path, Restore_path, Retentions_days)
+1. Users: ( Username varchar, password varchar , usertype varchar ).
+2. Roles: ( Role:admin,  Role:user).
+3. Menus: (uploadfile,backup, restore, dashboard, expiry_settings, App_settings, userroles).
+4. BackupSettings ( backup_path, Restore_path, Retentions_days).
+5. expiry_settings : will consist of ( Product,ITMStrike_diff,OTMStrike_diff) for calcualting option chain .
+  1. Product: BTCUSD
+  2. ITMSTRIKE:5
+  3. OTMSTRIKE:15
+  4. STRIKE_DIFF_EXP1 : 100
+  5. STRIKE_DIFF_EXP2 : 200
+  6. STRIKE_DIFF_EXP3 : 500
+  7. STRIKE_DIFF_EXP4 : 500
+  8. STRIKE_DIFF_EXP5 : 500
+  9. STRIKE_DIFF_EXP6 : 1000
+  10 . STRIKE_DIFF_EXP7 : 1000
+     
+	  Problems: how to identify which expiry is 1 , 2 , 3 ,,7.
 
-expiry_settings : will consist of ( Product,ITMStrike_diff,OTMStrike_diff) for calcualting option chain 
-  Product: BTCUSD
-  ITMSTRIKE:5
-  OTMSTRIKE:15
-  STRIKE_DIFF_EXP1 : 100
-  STRIKE_DIFF_EXP2 : 200
-  STRIKE_DIFF_EXP3 : 500
-  STRIKE_DIFF_EXP4 : 500
-  STRIKE_DIFF_EXP5 : 500
-  STRIKE_DIFF_EXP6 : 1000
-  STRIKE_DIFF_EXP7 : 1000
-          Problems: how to identify which expiry is 1 , 2 , 3 ,,7.
           Solutions: take first date get different expiry base on that expiry identify exp1,exp2,exp3 so 
           there would be 365 expiries if expiry is daily expiry apart from declared holidays.
           WeekNo, ExpiryNo, Day
@@ -61,9 +62,9 @@ Options Table from csv imports
 3.Options_BTCUSDT_2024
 4.Options_BTCUSDT_2025
 
-symbol,price,size,timesamp,buyer_role
-P-BTC-47500-010122,1386.5,1,2022-01-01 00:00:00.621540,Taker
-C-BTC-50000-140122,11705.5,1,2022-01-01 00:00:00.621540,Taker
+id,symbol,price,size,timesamp,buyer_role:
+1.P-BTC-47500-010122,1386.5,1,2022-01-01 00:00:00.621540,Taker
+2.C-BTC-50000-140122,11705.5,1,2022-01-01 00:00:00.621540,Taker
 
  Problem: 
  1. Convert int to long for size column, convert timestamp column from varchar to timestamp 
