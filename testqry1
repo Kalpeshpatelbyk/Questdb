@@ -1,0 +1,31 @@
+select * FROM futures
+
+SELECT 
+    futures.timestamp,
+   to_str(futures.timestamp, 'ddMMyy') AS date_ddmmyy 
+FROM futures;
+
+SELECT distinct  to_str(futures.timestamp, 'ddMMyy') AS date_ddmmyy FROM futures ORDER BY futures.timestamp;
+SELECT to_str(systimestamp(), 'ddMMyy') AS date_ddmmyy FROM long_sequence(1);
+
+SELECT  timestamp, DISTINCT to_str(timestamp, 'ddMMyy') AS date_ddmmyy 
+FROM "futures"
+ORDER BY futures.timestamp;
+
+
+
+SELECT DISTINCT
+    date_trunc('day', timestamp) AS date_only
+FROM futures
+ORDER BY date_only ASC;
+
+
+
+SELECT 
+    to_str(date_only, 'ddMMyy') AS formatted_date
+FROM (
+    SELECT DISTINCT
+        date_trunc('day', timestamp) AS date_only
+    FROM futures
+    ORDER BY date_only ASC
+);
