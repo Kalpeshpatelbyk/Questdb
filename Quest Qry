@@ -1,0 +1,5 @@
+1. RENAME TABLE 'options_btc_2024' TO 'opt_2024';
+2. Select * from "options_BTC_2025"
+3. SHOW COLUMNS FROM "options_BTC_2025"
+4. SHOW PARTITIONS FROM options_BTC_2025;
+
