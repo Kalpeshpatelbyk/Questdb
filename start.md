@@ -45,23 +45,30 @@ expiry_settings : will consist of ( Product,ITMStrike_diff,OTMStrike_diff) for c
           2,7 -Sunday
 
 Futures Table from csv imports
-  Futures_BTCUSDT_2022
-  Futures_BTCUSDT_2023
-  Futures_BTCUSDT_2024
-  Futures_BTCUSDT_2025
-    Problems: Convert int to long for size column, convert timestamp column from varchar to timestamp 
-    Create OHLC Table from respective table. 
+  1.Futures_BTCUSDT_2022
+  2.Futures_BTCUSDT_2023
+  3.Futures_BTCUSDT_2024
+  4.Futures_BTCUSDT_2025
+    
+    Problems: 
+    1.Convert int to long for size column, convert timestamp column from varchar to timestamp 
+    2.Create OHLC Table from respective table. 
     
 
-    
-Options_BTCUSDT_2022
-Options_BTCUSDT_2023
-Options_BTCUSDT_2024
-Options_BTCUSDT_2025
-symbol,price,size,timesamp,maker_taker
+Options Table from csv imports    
+1.Options_BTCUSDT_2022
+2.Options_BTCUSDT_2023
+3.Options_BTCUSDT_2024
+4.Options_BTCUSDT_2025
+
+symbol,price,size,timesamp,buyer_role
 P-BTC-47500-010122,1386.5,1,2022-01-01 00:00:00.621540,Taker
 C-BTC-50000-140122,11705.5,1,2022-01-01 00:00:00.621540,Taker
-	
+
+ Problem: 
+ 1. Convert int to long for size column, convert timestamp column from varchar to timestamp 
+ 2. Need to split symbol TO -> P-BTC, Strike, Expiry
+ 3. Create OHLC Table from respective table base on strike and expiry.
  
  
  
