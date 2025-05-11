@@ -4,6 +4,9 @@ Default Futures Table from csv file deltaexchange
 1. Futures:
 CREATE TABLE 'futures' ( 	product_symbol VARCHAR,	price DOUBLE, 	size DOUBLE,  	timestamp VARCHAR, 	buyer_role VARCHAR )WITH maxUncommittedRows=500000, o3MaxLag=600000000us;
 
+
+
+
 2. Modified Table with timestamp varchar converted to timestamp. and added day partiton
 
 CREATE TABLE 'furures_BTCUSD_2022' ( 	product_symbol SYMBOL CAPACITY 8 CACHE, price DOUBLE,  	size DOUBLE,	timestamp TIMESTAMP ) TIMESTAMP(timestamp) PARTITION BY DAY WAL WITH maxUncommittedRows=500000, o3MaxLag=600000000us
@@ -15,3 +18,18 @@ OR
 SELECT     product_symbol,    timestamp_floor('5m', timestamp) AS datetime,    first(price) AS open,    max(price) AS high,    min(price) AS low,    last(price) AS close,    sum(size) AS volume,    round(avg(price), 2) AS avg_price
 FROM futures_BTCUSD_2022 WHERE timestamp IS NOT NULL
 
+4. CREATE TABLE futures_BTCUSD_2022_5min (
+    product_symbol SYMBOL,
+    datetime TIMESTAMP,
+    open DOUBLE,
+    high DOUBLE,
+    low DOUBLE,
+    close DOUBLE,
+    volume DOUBLE,
+    cast_avg DOUBLE
+) TIMESTAMP(datetime)
+PARTITION BY DAY
+WITH (
+    walEnabled = true,
+    o3MaxLag = 300000000us  -- 5 minutes lag
+);
