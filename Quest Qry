@@ -1,5 +1,55 @@
+0. ALTER TABLE my_table ALTER COLUMN str_col TYPE VARCHAR;
 1. RENAME TABLE 'options_btc_2024' TO 'opt_2024';
 2. Select * from "options_BTC_2025"
 3. SHOW COLUMNS FROM "options_BTC_2025"
 4. SHOW PARTITIONS FROM options_BTC_2025;
+5. CREATE TABLE mytable_copy AS (  SELECT * FROM mytable WHERE column_value != 42) TIMESTAMP(ts) PARTITION BY DAY;
+6. DROP TABLE mytable; 
+7. RENAME table mytable_copy TO mytable;
 
+5.Create sample table with deduplication/upsert for QuestDB
+-- QuestDB equivalent
+CREATE TABLE metrics (
+    timestamp TIMESTAMP,      -- Explicit timestamp for time-series queries
+    name SYMBOL CAPACITY 50000,  -- Optimized for high-cardinality categorical values
+    description VARCHAR,      -- Free-text description, not ideal for SYMBOL indexing
+    unit SYMBOL CAPACITY 256, -- Limited set of unit types, efficient as SYMBOL
+    id UUID,                  -- UUID optimized for unique identifiers
+    value DOUBLE              -- Numeric measurement field
+) TIMESTAMP(timestamp)
+PARTITION BY DAY WAL
+DEDUP UPSERT KEYS(timestamp, name);
+
+
+# QuestDB API URL
+QUESTDB_URL="http://localhost:9000/exec"
+
+# Query: Drop partitions older than 30 days
+QUERY="ALTER TABLE my_table DROP PARTITION WHERE timestamp < dateadd('d', -30, now());"
+
+# Execute the query
+curl -G "$QUESTDB_URL" --data-urlencode "query=$QUERY"
+
+Where do I find the log and how do I filter the log messages?
+Log files are stored in the log folder under the root_directory. The log has the following levels to assist filtering:
+Check the log page for the available log levels.
+
+query by time?
+Yes! When using the WHERE statement to define the time range for a query, the IN keyword allows modifying the range and interval of the search. The range can be tuned to a second resolution.
+For example, the following query search for daily records between 9:15 to 16:00 inclusively from Jan 1 2000 for 365 days. The original timestamp, 2000-01-01T09:15, 
+is extended for 405 minutes to cover the range. This range is repeated every day for 365 times:
+
+SELECT timestamp, col1 FROM 'table1' WHERE timestamp IN '2000-01-01T09:15;405m;1d;365';
+
+A materialized view is a special QuestDB table that stores the pre-computed results of a query. Unlike regular views, which compute their results at query time, materialized views persist their data to disk, making them particularly efficient for expensive aggregate queries that are run frequently.
+
+Related documentation
+Concepts
+
+Introduction to materialized views: Understanding how to best design queries with materialized views
+SQL Commands
+
+CREATE MATERIALIZED VIEW: Create a new materialized view
+DROP MATERIALIZED VIEW: Remove a materialized view
+REFRESH MATERIALIZED VIEW: Manually refresh a materialized view
+ALTER MATERIALIZED VIEW RESUME WAL: Resume WAL for a materialized view
