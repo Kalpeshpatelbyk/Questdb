@@ -1,0 +1,22 @@
+CREATE TABLE 'C_BTC' ( 
+	expiry_date TIMESTAMP,
+	symbol SYMBOL CAPACITY 8 CACHE,
+	strike_price INT,
+	price DOUBLE,
+	timestamp TIMESTAMP
+) timestamp(expiry_date) PARTITION BY DAY WAL
+WITH maxUncommittedRows=500000, o3MaxLag=600000000us
+DEDUP UPSERT KEYS(expiry_date,symbol,strike_price,price);
+
+CREATE TABLE 'C_BTC_OHLC' ( 
+	expiry_date TIMESTAMP,
+	symbol SYMBOL CAPACITY 8 CACHE,
+	strike_price INT,
+	open DOUBLE,
+	high DOUBLE,
+	low DOUBLE,
+	close DOUBLE,
+	timestamp TIMESTAMP
+) timestamp(expiry_date) PARTITION BY DAY WAL
+WITH maxUncommittedRows=500000, o3MaxLag=600000000us
+DEDUP UPSERT KEYS(expiry_date,symbol,strike_price,timestamp);
