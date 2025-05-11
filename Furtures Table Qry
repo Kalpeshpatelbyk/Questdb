@@ -18,18 +18,11 @@ OR
 SELECT     product_symbol,    timestamp_floor('5m', timestamp) AS datetime,    first(price) AS open,    max(price) AS high,    min(price) AS low,    last(price) AS close,    sum(size) AS volume,    round(avg(price), 2) AS avg_price
 FROM futures_BTCUSD_2022 WHERE timestamp IS NOT NULL
 
-4. CREATE TABLE futures_BTCUSD_2022_5min (
-    product_symbol SYMBOL,
-    datetime TIMESTAMP,
-    open DOUBLE,
-    high DOUBLE,
-    low DOUBLE,
-    close DOUBLE,
-    volume DOUBLE,
-    cast_avg DOUBLE
-) TIMESTAMP(datetime)
-PARTITION BY DAY
-WITH (
-    walEnabled = true,
-    o3MaxLag = 300000000us  -- 5 minutes lag
-);
+4. CREATE TABLE futures_BTCUSD_2022_5min (     product_symbol SYMBOL,    datetime TIMESTAMP,    open DOUBLE,    high DOUBLE,    low DOUBLE,    close DOUBLE,    volume DOUBLE,    cast_avg DOUBLE) TIMESTAMP(datetime)
+PARTITION BY DAY WITH (    walEnabled = true,    o3MaxLag = 300000000us  -- 5 minutes lag);
+
+INSERT INTO futures_BTCUSD_2022_5min SELECT product_symbol,    timestamp_floor('5m', timestamp) AS datetime,    first(price) AS open,    max(price) AS high,    min(price) AS low,
+last(price) AS close,    sum(size) AS volume,    FLOOR(avg(price)*10)/10 AS cast_avg  -- Fixed the rounding calculationFROM futures_BTCUSD_2022 GROUP BY product_symbol, timestamp_floor('5m', timestamp) ORDER BY datetime;
+
+5. Truncate table futures_BTCUSD_2022_5min;
+6. Select * From futures_BTCUSD_2022_5min;
