@@ -49,7 +49,18 @@ Concepts
 Introduction to materialized views: Understanding how to best design queries with materialized views
 SQL Commands
 
-CREATE MATERIALIZED VIEW: Create a new materialized view
-DROP MATERIALIZED VIEW: Remove a materialized view
-REFRESH MATERIALIZED VIEW: Manually refresh a materialized view
-ALTER MATERIALIZED VIEW RESUME WAL: Resume WAL for a materialized view
+1. CREATE MATERIALIZED VIEW: Create a new materialized view
+2. DROP MATERIALIZED VIEW: Remove a materialized view
+3. REFRESH MATERIALIZED VIEW: Manually refresh a materialized view
+4. ALTER MATERIALIZED VIEW RESUME WAL: Resume WAL for a materialized view
+
+
+1. CREATE MATERIALIZED VIEW: Create a new materialized view
+   a. Base table
+CREATE TABLE trades (   timestamp TIMESTAMP,   symbol SYMBOL,   price DOUBLE,   amount DOUBLE ) TIMESTAMP(timestamp) PARTITION BY DAY;
+
+Now we can create a materialized view holding aggregated data from the base table:
+
+Hourly materialized view 
+
+CREATE MATERIALIZED VIEW trades_hourly_prices AS ( SELECT  timestamp,    symbol,    avg(price) AS avg_price  FROM trades  SAMPLE BY 1h) PARTITION BY HOUR;
