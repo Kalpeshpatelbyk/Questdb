@@ -1,0 +1,13 @@
+https://questdb.com/docs/reference/function/date-time/
+
+SELECT date_trunc('hour', '2022-03-11T22:00:30.555555Z') hour,
+date_trunc('month', '2022-03-11T22:00:30.555555Z') month,
+date_trunc('year','2022-03-11T22:00:30.555555Z') year;
+
+SELECT extract(millennium from '2023-03-11T22:00:30.555555Z') millennium,
+extract(year from '2023-03-11T22:00:30.555555Z') year,
+extract(month from '2023-03-11T22:00:30.555555Z') month,
+extract(week from '2023-03-11T22:00:30.555555Z') quarter,
+extract(hour from '2023-03-11T22:00:30.555555Z') hour,
+extract(second from '2023-03-11T22:00:30.555555Z') second;
+
