@@ -1,12 +1,55 @@
-CREATE TABLE 'C_BTC' ( 
-	expiry_date TIMESTAMP,
-	symbol SYMBOL CAPACITY 8 CACHE,
-	strike_price INT,
+CREATE TABLE 'options_P_BTC_2022' ( 
+  product_symbol symbol,
+  otype symbol,
+  underlying SYMBOL CAPACITY 8 CACHE,
+  strike_price int,
+  expiry_date TIMESTAMP,
 	price DOUBLE,
-	timestamp TIMESTAMP
-) timestamp(expiry_date) PARTITION BY DAY WAL
+	size LONG,
+	timestamp TIMESTAMP,
+  days_to_expiry int,
+  week_no int,
+  week_day symbol
+) TIMESTAMP(timestamp) PARTITION BY DAY WAL
 WITH maxUncommittedRows=500000, o3MaxLag=600000000us
-DEDUP UPSERT KEYS(expiry_date,symbol,strike_price,price);
+
+2. Insert Data from existing table 
+
+insert into 'options_P_BTC_2022'
+SELECT
+    product_symbol,
+    split_part(product_symbol, '-', 1) AS otype,
+    split_part(product_symbol, '-', 2) AS underlying,
+    cast(split_part(product_symbol, '-', 3) AS double) AS strike,
+    to_timestamp(
+        '20' || right(split_part(product_symbol, '-', 4), 2) || '-' ||
+        substring(split_part(product_symbol, '-', 4), 3, 2) || '-' ||
+        substring(split_part(product_symbol, '-', 4), 1, 2),
+        'yyyy-MM-dd'
+    ) AS expiry_date,
+    price,size, to_timestamp(timestamp, 'yyyy-MM-dd HH:mm:ss.SSSUUU') AS timestamp,
+    datediff(
+        'd',
+        to_timestamp(split_part(timestamp, ' ', 1), 'yyyy-MM-dd'),
+        to_timestamp(
+            '20' || right(split_part(product_symbol, '-', 4), 2) || '-' ||
+            substring(split_part(product_symbol, '-', 4), 3, 2) || '-' ||
+            substring(split_part(product_symbol, '-', 4), 1, 2),
+            'yyyy-MM-dd'
+        )
+    ) AS days_to_expiry,
+    extract(week from to_timestamp(timestamp, 'yyyy-MM-dd HH:mm:ss.SSSUUU')) AS week_no,
+    switch(
+        day_of_week(to_timestamp(timestamp, 'yyyy-MM-dd HH:mm:ss.SSSUUU')),
+        1, 'Mon',
+        2, 'Tue',
+        3, 'Wed',
+        4, 'Thu',
+        5, 'Fri',
+        6, 'Sat',
+        7, 'Sun'
+    ) AS week_day
+FROM opt_2024;
 
 CREATE TABLE 'C_BTC_OHLC' ( 
 	expiry_date TIMESTAMP,
