@@ -69,15 +69,25 @@ FROM options_BTC_2022
 WHERE timestamp IS NOT NULL;
 
 
-CREATE TABLE 'C_BTC_OHLC' ( 
-	expiry_date TIMESTAMP,
-	symbol SYMBOL CAPACITY 256 CACHE,
-	strike_price INT,
-	open DOUBLE,
-	high DOUBLE,
-	low DOUBLE,
-	close DOUBLE,
-	timestamp TIMESTAMP
-) timestamp(expiry_date) PARTITION BY DAY WAL
-WITH maxUncommittedRows=500000, o3MaxLag=600000000us
-DEDUP UPSERT KEYS(expiry_date,symbol,strike_price,timestamp);
+--- OHLC TABLE 
+
+CREATE TABLE 'options_C_BTC_2022_5min' (
+    product_symbol SYMBOL CAPACITY 256 CACHE,
+    otype SYMBOL CAPACITY 256 CACHE,
+    underlying SYMBOL CAPACITY 8 CACHE,
+    strike_price INT,
+    expiry_date TIMESTAMP,
+    open_price DOUBLE,
+    high_price DOUBLE,
+    low_price DOUBLE,
+    close_price DOUBLE,
+    weighted_price DOUBLE,
+    volume LONG,
+    timestamp TIMESTAMP,
+    days_to_expiry INT,
+    week_no INT,
+    week_day SYMBOL CAPACITY 256 CACHE
+) timestamp(timestamp) PARTITION BY DAY WAL
+WITH maxUncommittedRows=500000, o3MaxLag=600000000us;
+
+----- OHLC UPDATE
