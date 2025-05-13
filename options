@@ -1,3 +1,14 @@
+
+-- To Check if data in table is date missing or or not.
+SELECT 
+    to_str(date_only, 'dd-MM-yy') AS formatted_date
+FROM (
+    SELECT DISTINCT
+        date_trunc('day', timestamp) AS date_only
+    FROM options_BTC_2023
+    ORDER BY date_only ASC
+);
+
 CREATE TABLE 'options_P_BTC_2022' ( 
   product_symbol symbol,
   otype symbol,
