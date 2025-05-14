@@ -1,0 +1,27 @@
+CREATE TABLE 'expirysettings' ( 
+	 product symbol,
+   expiry timestamp,
+   week int,
+   strikediff int,
+   itm_strike_count int,
+   otm_strike_count int,
+  description varchar ,
+	timestamp VARCHAR);
+
+ 
+ CREATE TABLE 'rolemst' ( 
+	role VARCHAR,
+	description VARCHAR,
+	timestamp VARCHAR
+)
+WITH maxUncommittedRows=500000, o3MaxLag=600000000us;
+
+CREATE TABLE 'user_settings' ( 
+	uname VARCHAR,
+	pwd VARCHAR,
+	role VARCHAR,
+	timestamp VARCHAR
+)
+WITH maxUncommittedRows=500000, o3MaxLag=600000000us;
+
+
