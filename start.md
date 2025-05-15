@@ -13,17 +13,19 @@ Tables________________________________________
 2. Roles: ( Role:admin,  Role:user).
 3. Menus: (uploadfile,backup, restore, dashboard, expiry_settings, App_settings, userroles).
 4. BackupSettings ( backup_path, Restore_path, Retentions_days).
-5. expiry_settings : will consist of ( Product,ITMStrike_diff,OTMStrike_diff) for calcualting option chain .
-  1. Product: BTCUSD
-  2. ITMSTRIKE:5
-  3. OTMSTRIKE:15
-  4. STRIKE_DIFF_EXP1 : 100
-  5. STRIKE_DIFF_EXP2 : 200
-  6. STRIKE_DIFF_EXP3 : 500
-  7. STRIKE_DIFF_EXP4 : 500
-  8. STRIKE_DIFF_EXP5 : 500
-  9. STRIKE_DIFF_EXP6 : 1000
-  10 . STRIKE_DIFF_EXP7 : 1000
+5. expiry_settings : will consist of ( product, week, strikediff, itm_strike_count, otm_strike_count, description, "timestamp") for calcualting option chain .
+ INSERT INTO expirysettings (product, week, strikediff, itm_strike_count, otm_strike_count, description, "timestamp")
+VALUES
+    ('BTCUSD', 1, 200, 5, 10, '1st week Options Expiry', now()),
+    ('BTCUSD', 2, 200, 5, 10, '2nd week Options Expiry', now()),
+    ('BTCUSD', 3, 200, 5, 10, '3rd week Options Expiry', now()),
+    ('BTCUSD', 4, 500, 5, 10, '4th week Options Expiry', now()),
+    ('BTCUSD', 5, 500, 5, 10, '5th week Options Expiry', now()),
+    ('BTCUSD', 6, 500, 5, 10, '6th week Options Expiry', now()),
+    ('BTCUSD', 7, 1000, 5, 10, '7th week Options Expiry', now()),
+    ('BTCUSD', 8, 1000, 5, 10, '8th week Options Expiry', now()),
+    ('BTCUSD', 9, 1000, 5, 10, '9th week Options Expiry', now()),
+    ('BTCUSD', 10, 1000, 5, 10, '10th week Options Expiry', now());
      
 	  Problems: how to identify which expiry is 1 , 2 , 3 ,,7.
 
