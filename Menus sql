@@ -1,0 +1,51 @@
+-- Create the 'menu_items' table to store menu items
+CREATE TABLE menu_items (
+    menu_id INT,
+    menu_name VARCHAR,
+    description VARCHAR,
+    link VARCHAR,
+    parent_id INT,  --  To represent hierarchical menu structure
+    "timestamp" TIMESTAMP
+) timestamp("timestamp") PARTITION BY DAY;
+
+-- Create the 'role_menu_mapping' table to map roles to menu items
+CREATE TABLE role_menu_mapping (
+    role VARCHAR,
+    menu_id INT,
+    "timestamp" TIMESTAMP
+) timestamp("timestamp") PARTITION BY DAY;
+
+-- Insert menu items
+INSERT INTO menu_items (menu_id, menu_name, description, link, parent_id, "timestamp")
+VALUES
+    (1, 'Dashboard', 'Main dashboard', '/dashboard', 0, now()),
+    (2, 'Users', 'Manage users', '/users', 0, now()),
+    (3, 'Roles', 'Manage roles', '/roles', 0, now()),
+    (4, 'Settings', 'Application settings', '/settings', 0, now()),
+    (5, 'User List', 'View all users', '/users/list', 2, now()),
+    (6, 'Add User', 'Add a new user', '/users/add', 2, now()),
+    (7, 'Role List', 'View all roles', '/roles/list', 3, now()),
+    (8, 'Add Role', 'Add a new role', '/roles/add', 3, now()),
+    (9, 'Profile', 'User profile', '/profile', 0, now()),
+    (10, 'Reports', 'View Reports', '/reports',0,now());
+
+-- Insert role-menu mappings for admin
+INSERT INTO role_menu_mapping (role, menu_id, "timestamp")
+VALUES
+    ('admin', 1, now()),  -- Dashboard
+    ('admin', 2, now()),  -- Users
+    ('admin', 3, now()),  -- Roles
+    ('admin', 4, now()),  -- Settings
+    ('admin', 5, now()),  -- User List
+    ('admin', 6, now()),  -- Add User
+    ('admin', 7, now()),  -- Role List
+    ('admin', 8, now()),  -- Add Role
+    ('admin', 9, now()),  -- Profile
+    ('admin', 10, now()); -- Reports
+
+-- Insert role-menu mappings for user
+INSERT INTO role_menu_mapping (role, menu_id, "timestamp")
+VALUES
+    ('user', 1, now()),  -- Dashboard
+    ('user', 9, now()),  -- Profile
+    ('user', 10, now());  -- Reports
